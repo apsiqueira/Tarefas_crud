@@ -1,8 +1,17 @@
 <fieldset>
 
     <legend>Gerenciador de Tarefas</legend>
-    <form action="index.php" action="GET">
-      <label for="nome">Tarefa :</label>
+    <form action="index.php" method="POST">
+      <label for="nome">Tarefa :
+      <?php 
+        
+        
+        
+        
+        ?>
+      
+      
+      </label>
       <input type="text" name="nome" placeholder="nome" required><br>
 
       <label for="descricao">Descrição :</label><br>

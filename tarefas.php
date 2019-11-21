@@ -3,6 +3,10 @@ session_start();
 require_once "conexao.php";
 require_once "apoio.php";
 $exibir_tabela = false;
+$temErros;
+$erros_validacao=array();
+
+
 
 $lista_tarefas = array();
 
@@ -16,33 +20,37 @@ $tarefa = array(
  
     );
 
-
-if (isset($_GET["btnEnviar"]) and $_GET["nome"] != "") {
-
+if (existPost()) {
 
 
 
-    $tarefa['nome'] = $_GET['nome'];
 
-    if (isset($_GET['descricao'])) {
-        $tarefa['descricao'] = utf8_encode($_GET['descricao']);
+    if (isset($_POST['nome']) && strlen($_POST['nome']) > 0) {
+        $tarefa['nome'] = $_POST['nome'];
+        } else {
+        $tem_erros = true;
+        $erros_validacao['nome'] = 'O nome da tarefa é obrigatório!';
+        }
+
+    if (isset($_POST['descricao'])) {
+        $tarefa['descricao'] = utf8_encode($_POST['descricao']);
     } else {
         $tarefa['descricao'] = '';
     }
-    if (isset($_GET['prazo'])) {
+    if (isset($_POST['prazo'])) {
   
-        $tarefa['prazo'] =( $_GET['prazo']);
+        $tarefa['prazo'] =( $_POST['prazo']);
       
     } else {
         $tarefa['prazo'] = '';
     }
-    $tarefa['prioridade'] = $_GET['prioridade'];
-    if (isset($_GET['concluida'])) {
-        $tarefa['concluida'] = $_GET['concluida'];
+    $tarefa['prioridade'] = $_POST['prioridade'];
+    if (isset($_POST['concluida'])) {
+        $tarefa['concluida'] = $_POST['concluida'];
     } else {
         $tarefa['concluida'] = '';
     }
-    if (isset($_GET['concluida'])) {
+    if (isset($_POST['concluida'])) {
 $tarefa['concluida'] = 1;
 } else {
 $tarefa['concluida'] = 0;
@@ -51,10 +59,16 @@ $tarefa['concluida'] = 0;
   
 
 
-
+if (! $tem_erros) {
     gravar_tarefa($conexao, $tarefa);
-    header("location:index.php");
+    header('Location: tarefas.php');
     die();
+    }
+
+
+    // gravar_tarefa($conexao, $tarefa);
+    // header("location:index.php");
+    // die();
 
 
 
@@ -63,15 +77,15 @@ $tarefa['concluida'] = 0;
 
 // elseif(){
 
-if(isset ($_GET["btnEditar"])){
+if(isset ($_POST["btnEditar"])){
   
-// var_dump($_GET);
-(isset($_GET["id"]))?$tarefa["id"]=$_GET["id"]:"";
-(isset($_GET["nome"]))?$tarefa["nome"]=$_GET["nome"]:"";
-(isset($_GET["descricao"]))?$tarefa["descricao"]=$_GET["descricao"]:"";
-(isset($_GET["prioridade"]))?$tarefa["prioridade"]=$_GET["prioridade"]:"";
-(isset($_GET["prazo"]))?$tarefa["prazo"]=$_GET["prazo"]:"";
-(isset($_GET["concluida"]))?$tarefa["concluida"]=$_GET["concluida"]:$tarefa["concluida"]=0;
+// var_dump($_POST);
+(isset($_POST["id"]))?$tarefa["id"]=$_POST["id"]:"";
+(isset($_POST["nome"]))?$tarefa["nome"]=$_POST["nome"]:"";
+(isset($_POST["descricao"]))?$tarefa["descricao"]=$_POST["descricao"]:"";
+(isset($_POST["prioridade"]))?$tarefa["prioridade"]=$_POST["prioridade"]:"";
+(isset($_POST["prazo"]))?$tarefa["prazo"]=$_POST["prazo"]:"";
+(isset($_POST["concluida"]))?$tarefa["concluida"]=$_POST["concluida"]:$tarefa["concluida"]=0;
 
 
 echo "<pre>";

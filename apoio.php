@@ -41,3 +41,12 @@ function checaprioridade($value){
 
 
 }
+
+function existPost(){
+    if(count($_POST)>0)){
+    return true;
+}
+return false;
+
+
+}
